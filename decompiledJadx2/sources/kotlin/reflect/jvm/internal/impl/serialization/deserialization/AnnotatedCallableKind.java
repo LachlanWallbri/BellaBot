@@ -1,0 +1,13 @@
+package kotlin.reflect.jvm.internal.impl.serialization.deserialization;
+
+/* JADX WARN: Classes with same name are omitted:
+  classes7.dex
+  classes8.dex
+ */
+/* loaded from: classes2.dex */
+public enum AnnotatedCallableKind {
+    FUNCTION,
+    PROPERTY,
+    PROPERTY_GETTER,
+    PROPERTY_SETTER
+}

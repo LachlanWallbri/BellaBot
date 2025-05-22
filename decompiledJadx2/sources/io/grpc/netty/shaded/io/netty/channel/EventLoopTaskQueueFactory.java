@@ -1,0 +1,11 @@
+package io.grpc.netty.shaded.io.netty.channel;
+
+import java.util.Queue;
+
+/* JADX WARN: Classes with same name are omitted:
+  classes6.dex
+ */
+/* loaded from: classes7.dex */
+public interface EventLoopTaskQueueFactory {
+    Queue<Runnable> newTaskQueue(int i);
+}

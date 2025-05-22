@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "BellaBotApp",
+    "slug": "BellaBotApp",
+    "version": "1.0.0",
+    "orientation": "landscape",
+    "icon": "./assets/icon_big.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/icon_big.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon_small.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.unsw.bellabot"
+    },
+    "web": {
+      "favicon": "./assets/icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "14b48b8c-a194-4dc2-a5c8-e084e963048f"
+      }
+    }
+  }
+}

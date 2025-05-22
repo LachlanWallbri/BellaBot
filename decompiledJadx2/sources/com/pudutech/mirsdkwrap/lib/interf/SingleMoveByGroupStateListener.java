@@ -1,0 +1,57 @@
+package com.pudutech.mirsdkwrap.lib.interf;
+
+import com.pudutech.mirsdk.aidl.serialize.ElevatorUtilizeState;
+import com.pudutech.mirsdkwrap.lib.move.MoveErrorHelper;
+import com.pudutech.mirsdkwrap.lib.move.bean.ElevatorEventParam;
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+
+/* JADX WARN: Classes with same name are omitted:
+  classes4.dex
+ */
+/* compiled from: SingleMoveByGroupStateListener.kt */
+@Metadata(m3959bv = {1, 0, 3}, m3960d1 = {"\u0000:\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0004\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0002\b\u0016\u0018\u00002\u00020\u0001B\u0005¢\u0006\u0002\u0010\u0002J\u0010\u0010\u0003\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u00020\u0006H\u0016J\b\u0010\u0007\u001a\u00020\u0004H\u0016J\b\u0010\b\u001a\u00020\u0004H\u0016J\u0010\u0010\t\u001a\u00020\u00042\u0006\u0010\n\u001a\u00020\u000bH\u0016J\u001a\u0010\f\u001a\u00020\u00042\u0006\u0010\n\u001a\u00020\u000b2\b\u0010\r\u001a\u0004\u0018\u00010\u000eH\u0016J\u0010\u0010\u000f\u001a\u00020\u00042\u0006\u0010\u0010\u001a\u00020\u0011H\u0016J\b\u0010\u0012\u001a\u00020\u0004H\u0016J\u0010\u0010\u0013\u001a\u00020\u00042\u0006\u0010\u0014\u001a\u00020\u0015H\u0016J\u0010\u0010\u0016\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u00020\u0006H\u0016¨\u0006\u0017"}, m3961d2 = {"Lcom/pudutech/mirsdkwrap/lib/interf/SingleMoveByGroupStateListener;", "Lcom/pudutech/mirsdkwrap/lib/interf/MoveByGroupStateListener;", "()V", "onArrive", "", "groupName", "", "onAvoid", "onCancel", "onElevatorCallback", "state", "Lcom/pudutech/mirsdk/aidl/serialize/ElevatorUtilizeState;", "onElevatorUtilizeState", "p1", "Lcom/pudutech/mirsdkwrap/lib/move/bean/ElevatorEventParam;", "onError", "eh", "Lcom/pudutech/mirsdkwrap/lib/move/MoveErrorHelper;", "onFillIn", "onMoving", "event", "Lcom/pudutech/mirsdkwrap/lib/interf/RobotMoveEvent;", "onPause", "module_robot_mirsdk_wrapper_release"}, m3962k = 1, m3963mv = {1, 1, 16})
+/* loaded from: classes6.dex */
+public class SingleMoveByGroupStateListener implements MoveByGroupStateListener {
+    @Override // com.pudutech.mirsdkwrap.lib.interf.MoveByGroupStateListener
+    public void onArrive(String groupName) {
+        Intrinsics.checkParameterIsNotNull(groupName, "groupName");
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.BaseRobotMoveStateListener
+    public void onAvoid() {
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.MoveByGroupStateListener
+    public void onCancel() {
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.BaseRobotMoveStateListener
+    public void onElevatorCallback(ElevatorUtilizeState state) {
+        Intrinsics.checkParameterIsNotNull(state, "state");
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.BaseRobotMoveStateListener
+    public void onElevatorUtilizeState(ElevatorUtilizeState state, ElevatorEventParam p1) {
+        Intrinsics.checkParameterIsNotNull(state, "state");
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.BaseRobotMoveStateListener
+    public void onError(MoveErrorHelper eh) {
+        Intrinsics.checkParameterIsNotNull(eh, "eh");
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.MoveByGroupStateListener
+    public void onFillIn() {
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.BaseRobotMoveStateListener
+    public void onMoving(RobotMoveEvent event) {
+        Intrinsics.checkParameterIsNotNull(event, "event");
+    }
+
+    @Override // com.pudutech.mirsdkwrap.lib.interf.MoveByGroupStateListener
+    public void onPause(String groupName) {
+        Intrinsics.checkParameterIsNotNull(groupName, "groupName");
+    }
+}

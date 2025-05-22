@@ -1,0 +1,19 @@
+package org.bouncycastle.pqc.crypto.qteslarnd1;
+
+import java.security.SecureRandom;
+import org.bouncycastle.crypto.KeyGenerationParameters;
+
+/* loaded from: classes9.dex */
+public class QTESLAKeyGenerationParameters extends KeyGenerationParameters {
+    private final int securityCategory;
+
+    public QTESLAKeyGenerationParameters(int i, SecureRandom secureRandom) {
+        super(secureRandom, -1);
+        QTESLASecurityCategory.getPrivateSize(i);
+        this.securityCategory = i;
+    }
+
+    public int getSecurityCategory() {
+        return this.securityCategory;
+    }
+}

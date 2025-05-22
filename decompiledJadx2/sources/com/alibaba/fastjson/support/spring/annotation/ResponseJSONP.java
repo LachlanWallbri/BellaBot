@@ -1,0 +1,20 @@
+package com.alibaba.fastjson.support.spring.annotation;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+/* JADX WARN: Classes with same name are omitted:
+  
+ */
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@ResponseBody
+/* loaded from: classes.dex */
+public @interface ResponseJSONP {
+    String callback() default "callback";
+}

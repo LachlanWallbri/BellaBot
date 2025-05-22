@@ -1,0 +1,104 @@
+package com.pudutech.schedulerlib;
+
+import androidx.constraintlayout.core.motion.utils.TypedValues;
+import java.util.LinkedHashMap;
+import kotlin.Metadata;
+import kotlin.ResultKt;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.intrinsics.IntrinsicsKt;
+import kotlin.coroutines.jvm.internal.DebugMetadata;
+import kotlin.coroutines.jvm.internal.SuspendLambda;
+import kotlin.jvm.functions.Function2;
+import kotlin.jvm.internal.Intrinsics;
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.Job;
+import kotlinx.coroutines.JobKt;
+
+/* JADX INFO: Access modifiers changed from: package-private */
+/* JADX WARN: Classes with same name are omitted:
+  classes.dex
+  classes6.dex
+  classes7.dex
+ */
+/* compiled from: ScheduleController.kt */
+@Metadata(m3959bv = {1, 0, 3}, m3960d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@¢\u0006\u0004\b\u0003\u0010\u0004"}, m3961d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, m3962k = 3, m3963mv = {1, 1, 16})
+@DebugMetadata(m3969c = "com.pudutech.schedulerlib.ScheduleController$destroyScheduler$1", m3970f = "ScheduleController.kt", m3971i = {0}, m3972l = {TypedValues.Attributes.TYPE_PIVOT_TARGET}, m3973m = "invokeSuspend", m3974n = {"$this$runBlocking"}, m3975s = {"L$0"})
+/* loaded from: classes2.dex */
+public final class ScheduleController$destroyScheduler$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
+    Object L$0;
+    int label;
+
+    /* renamed from: p$ */
+    private CoroutineScope f7424p$;
+    final /* synthetic */ ScheduleController this$0;
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public ScheduleController$destroyScheduler$1(ScheduleController scheduleController, Continuation continuation) {
+        super(2, continuation);
+        this.this$0 = scheduleController;
+    }
+
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    public final Continuation<Unit> create(Object obj, Continuation<?> completion) {
+        Intrinsics.checkParameterIsNotNull(completion, "completion");
+        ScheduleController$destroyScheduler$1 scheduleController$destroyScheduler$1 = new ScheduleController$destroyScheduler$1(this.this$0, completion);
+        scheduleController$destroyScheduler$1.f7424p$ = (CoroutineScope) obj;
+        return scheduleController$destroyScheduler$1;
+    }
+
+    @Override // kotlin.jvm.functions.Function2
+    public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
+        return ((ScheduleController$destroyScheduler$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+    }
+
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    public final Object invokeSuspend(Object obj) {
+        Job job;
+        LinkedHashMap linkedHashMap;
+        LinkedHashMap linkedHashMap2;
+        LinkedHashMap linkedHashMap3;
+        LinkedHashMap linkedHashMap4;
+        LinkedHashMap linkedHashMap5;
+        LinkedHashMap linkedHashMap6;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        int i = this.label;
+        if (i == 0) {
+            ResultKt.throwOnFailure(obj);
+            CoroutineScope coroutineScope = this.f7424p$;
+            job = this.this$0.fpsJob;
+            if (job != null) {
+                this.L$0 = coroutineScope;
+                this.label = 1;
+                if (JobKt.cancelAndJoin(job, this) == coroutine_suspended) {
+                    return coroutine_suspended;
+                }
+            }
+        } else {
+            if (i != 1) {
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+            ResultKt.throwOnFailure(obj);
+        }
+        linkedHashMap = this.this$0.espFps;
+        synchronized (linkedHashMap) {
+            linkedHashMap2 = this.this$0.espFps;
+            linkedHashMap2.clear();
+            linkedHashMap3 = this.this$0.errESP;
+            linkedHashMap3.clear();
+            Unit unit = Unit.INSTANCE;
+        }
+        linkedHashMap4 = this.this$0.udpFps;
+        synchronized (linkedHashMap4) {
+            linkedHashMap5 = this.this$0.udpFps;
+            linkedHashMap5.clear();
+            linkedHashMap6 = this.this$0.errUDP;
+            linkedHashMap6.clear();
+            Unit unit2 = Unit.INSTANCE;
+        }
+        this.this$0.closeESP();
+        this.this$0.closeUDP();
+        return Unit.INSTANCE;
+    }
+}

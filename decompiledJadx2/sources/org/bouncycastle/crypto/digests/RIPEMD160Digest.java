@@ -1,0 +1,504 @@
+package org.bouncycastle.crypto.digests;
+
+import org.bouncycastle.util.Memoable;
+
+/* loaded from: classes9.dex */
+public class RIPEMD160Digest extends GeneralDigest {
+    private static final int DIGEST_LENGTH = 20;
+
+    /* renamed from: H0 */
+    private int f9234H0;
+
+    /* renamed from: H1 */
+    private int f9235H1;
+
+    /* renamed from: H2 */
+    private int f9236H2;
+
+    /* renamed from: H3 */
+    private int f9237H3;
+
+    /* renamed from: H4 */
+    private int f9238H4;
+
+    /* renamed from: X */
+    private int[] f9239X;
+    private int xOff;
+
+    public RIPEMD160Digest() {
+        this.f9239X = new int[16];
+        reset();
+    }
+
+    public RIPEMD160Digest(RIPEMD160Digest rIPEMD160Digest) {
+        super(rIPEMD160Digest);
+        this.f9239X = new int[16];
+        copyIn(rIPEMD160Digest);
+    }
+
+    /* renamed from: RL */
+    private int m4039RL(int i, int i2) {
+        return (i >>> (32 - i2)) | (i << i2);
+    }
+
+    private void copyIn(RIPEMD160Digest rIPEMD160Digest) {
+        super.copyIn((GeneralDigest) rIPEMD160Digest);
+        this.f9234H0 = rIPEMD160Digest.f9234H0;
+        this.f9235H1 = rIPEMD160Digest.f9235H1;
+        this.f9236H2 = rIPEMD160Digest.f9236H2;
+        this.f9237H3 = rIPEMD160Digest.f9237H3;
+        this.f9238H4 = rIPEMD160Digest.f9238H4;
+        int[] iArr = rIPEMD160Digest.f9239X;
+        System.arraycopy(iArr, 0, this.f9239X, 0, iArr.length);
+        this.xOff = rIPEMD160Digest.xOff;
+    }
+
+    /* renamed from: f1 */
+    private int m4040f1(int i, int i2, int i3) {
+        return (i ^ i2) ^ i3;
+    }
+
+    /* renamed from: f2 */
+    private int m4041f2(int i, int i2, int i3) {
+        return ((~i) & i3) | (i2 & i);
+    }
+
+    /* renamed from: f3 */
+    private int m4042f3(int i, int i2, int i3) {
+        return (i | (~i2)) ^ i3;
+    }
+
+    /* renamed from: f4 */
+    private int m4043f4(int i, int i2, int i3) {
+        return (i & i3) | (i2 & (~i3));
+    }
+
+    /* renamed from: f5 */
+    private int m4044f5(int i, int i2, int i3) {
+        return i ^ (i2 | (~i3));
+    }
+
+    private void unpackWord(int i, byte[] bArr, int i2) {
+        bArr[i2] = (byte) i;
+        bArr[i2 + 1] = (byte) (i >>> 8);
+        bArr[i2 + 2] = (byte) (i >>> 16);
+        bArr[i2 + 3] = (byte) (i >>> 24);
+    }
+
+    @Override // org.bouncycastle.util.Memoable
+    public Memoable copy() {
+        return new RIPEMD160Digest(this);
+    }
+
+    @Override // org.bouncycastle.crypto.Digest
+    public int doFinal(byte[] bArr, int i) {
+        finish();
+        unpackWord(this.f9234H0, bArr, i);
+        unpackWord(this.f9235H1, bArr, i + 4);
+        unpackWord(this.f9236H2, bArr, i + 8);
+        unpackWord(this.f9237H3, bArr, i + 12);
+        unpackWord(this.f9238H4, bArr, i + 16);
+        reset();
+        return 20;
+    }
+
+    @Override // org.bouncycastle.crypto.Digest
+    public String getAlgorithmName() {
+        return "RIPEMD160";
+    }
+
+    @Override // org.bouncycastle.crypto.Digest
+    public int getDigestSize() {
+        return 20;
+    }
+
+    @Override // org.bouncycastle.crypto.digests.GeneralDigest
+    protected void processBlock() {
+        int i = this.f9234H0;
+        int i2 = this.f9235H1;
+        int i3 = this.f9236H2;
+        int i4 = this.f9237H3;
+        int i5 = this.f9238H4;
+        int m4039RL = m4039RL(m4040f1(i2, i3, i4) + i + this.f9239X[0], 11) + i5;
+        int m4039RL2 = m4039RL(i3, 10);
+        int m4039RL3 = m4039RL(m4040f1(m4039RL, i2, m4039RL2) + i5 + this.f9239X[1], 14) + i4;
+        int m4039RL4 = m4039RL(i2, 10);
+        int m4039RL5 = m4039RL(m4040f1(m4039RL3, m4039RL, m4039RL4) + i4 + this.f9239X[2], 15) + m4039RL2;
+        int m4039RL6 = m4039RL(m4039RL, 10);
+        int m4039RL7 = m4039RL(m4039RL2 + m4040f1(m4039RL5, m4039RL3, m4039RL6) + this.f9239X[3], 12) + m4039RL4;
+        int m4039RL8 = m4039RL(m4039RL3, 10);
+        int m4039RL9 = m4039RL(m4039RL4 + m4040f1(m4039RL7, m4039RL5, m4039RL8) + this.f9239X[4], 5) + m4039RL6;
+        int m4039RL10 = m4039RL(m4039RL5, 10);
+        int m4039RL11 = m4039RL(m4039RL6 + m4040f1(m4039RL9, m4039RL7, m4039RL10) + this.f9239X[5], 8) + m4039RL8;
+        int m4039RL12 = m4039RL(m4039RL7, 10);
+        int m4039RL13 = m4039RL(m4039RL8 + m4040f1(m4039RL11, m4039RL9, m4039RL12) + this.f9239X[6], 7) + m4039RL10;
+        int m4039RL14 = m4039RL(m4039RL9, 10);
+        int m4039RL15 = m4039RL(m4039RL10 + m4040f1(m4039RL13, m4039RL11, m4039RL14) + this.f9239X[7], 9) + m4039RL12;
+        int m4039RL16 = m4039RL(m4039RL11, 10);
+        int m4039RL17 = m4039RL(m4039RL12 + m4040f1(m4039RL15, m4039RL13, m4039RL16) + this.f9239X[8], 11) + m4039RL14;
+        int m4039RL18 = m4039RL(m4039RL13, 10);
+        int m4039RL19 = m4039RL(m4039RL14 + m4040f1(m4039RL17, m4039RL15, m4039RL18) + this.f9239X[9], 13) + m4039RL16;
+        int m4039RL20 = m4039RL(m4039RL15, 10);
+        int m4039RL21 = m4039RL(m4039RL16 + m4040f1(m4039RL19, m4039RL17, m4039RL20) + this.f9239X[10], 14) + m4039RL18;
+        int m4039RL22 = m4039RL(m4039RL17, 10);
+        int m4039RL23 = m4039RL(m4039RL18 + m4040f1(m4039RL21, m4039RL19, m4039RL22) + this.f9239X[11], 15) + m4039RL20;
+        int m4039RL24 = m4039RL(m4039RL19, 10);
+        int m4039RL25 = m4039RL(m4039RL20 + m4040f1(m4039RL23, m4039RL21, m4039RL24) + this.f9239X[12], 6) + m4039RL22;
+        int m4039RL26 = m4039RL(m4039RL21, 10);
+        int m4039RL27 = m4039RL(m4039RL22 + m4040f1(m4039RL25, m4039RL23, m4039RL26) + this.f9239X[13], 7) + m4039RL24;
+        int m4039RL28 = m4039RL(m4039RL23, 10);
+        int m4039RL29 = m4039RL(m4039RL24 + m4040f1(m4039RL27, m4039RL25, m4039RL28) + this.f9239X[14], 9) + m4039RL26;
+        int m4039RL30 = m4039RL(m4039RL25, 10);
+        int m4039RL31 = m4039RL(m4039RL26 + m4040f1(m4039RL29, m4039RL27, m4039RL30) + this.f9239X[15], 8) + m4039RL28;
+        int m4039RL32 = m4039RL(m4039RL27, 10);
+        int m4039RL33 = m4039RL(i + m4044f5(i2, i3, i4) + this.f9239X[5] + 1352829926, 8) + i5;
+        int m4039RL34 = m4039RL(i3, 10);
+        int m4039RL35 = m4039RL(i5 + m4044f5(m4039RL33, i2, m4039RL34) + this.f9239X[14] + 1352829926, 9) + i4;
+        int m4039RL36 = m4039RL(i2, 10);
+        int m4039RL37 = m4039RL(i4 + m4044f5(m4039RL35, m4039RL33, m4039RL36) + this.f9239X[7] + 1352829926, 9) + m4039RL34;
+        int m4039RL38 = m4039RL(m4039RL33, 10);
+        int m4039RL39 = m4039RL(m4039RL34 + m4044f5(m4039RL37, m4039RL35, m4039RL38) + this.f9239X[0] + 1352829926, 11) + m4039RL36;
+        int m4039RL40 = m4039RL(m4039RL35, 10);
+        int m4039RL41 = m4039RL(m4039RL36 + m4044f5(m4039RL39, m4039RL37, m4039RL40) + this.f9239X[9] + 1352829926, 13) + m4039RL38;
+        int m4039RL42 = m4039RL(m4039RL37, 10);
+        int m4039RL43 = m4039RL(m4039RL38 + m4044f5(m4039RL41, m4039RL39, m4039RL42) + this.f9239X[2] + 1352829926, 15) + m4039RL40;
+        int m4039RL44 = m4039RL(m4039RL39, 10);
+        int m4039RL45 = m4039RL(m4039RL40 + m4044f5(m4039RL43, m4039RL41, m4039RL44) + this.f9239X[11] + 1352829926, 15) + m4039RL42;
+        int m4039RL46 = m4039RL(m4039RL41, 10);
+        int m4039RL47 = m4039RL(m4039RL42 + m4044f5(m4039RL45, m4039RL43, m4039RL46) + this.f9239X[4] + 1352829926, 5) + m4039RL44;
+        int m4039RL48 = m4039RL(m4039RL43, 10);
+        int m4039RL49 = m4039RL(m4039RL44 + m4044f5(m4039RL47, m4039RL45, m4039RL48) + this.f9239X[13] + 1352829926, 7) + m4039RL46;
+        int m4039RL50 = m4039RL(m4039RL45, 10);
+        int m4039RL51 = m4039RL(m4039RL46 + m4044f5(m4039RL49, m4039RL47, m4039RL50) + this.f9239X[6] + 1352829926, 7) + m4039RL48;
+        int m4039RL52 = m4039RL(m4039RL47, 10);
+        int m4039RL53 = m4039RL(m4039RL48 + m4044f5(m4039RL51, m4039RL49, m4039RL52) + this.f9239X[15] + 1352829926, 8) + m4039RL50;
+        int m4039RL54 = m4039RL(m4039RL49, 10);
+        int m4039RL55 = m4039RL(m4039RL50 + m4044f5(m4039RL53, m4039RL51, m4039RL54) + this.f9239X[8] + 1352829926, 11) + m4039RL52;
+        int m4039RL56 = m4039RL(m4039RL51, 10);
+        int m4039RL57 = m4039RL(m4039RL52 + m4044f5(m4039RL55, m4039RL53, m4039RL56) + this.f9239X[1] + 1352829926, 14) + m4039RL54;
+        int m4039RL58 = m4039RL(m4039RL53, 10);
+        int m4039RL59 = m4039RL(m4039RL54 + m4044f5(m4039RL57, m4039RL55, m4039RL58) + this.f9239X[10] + 1352829926, 14) + m4039RL56;
+        int m4039RL60 = m4039RL(m4039RL55, 10);
+        int m4039RL61 = m4039RL(m4039RL56 + m4044f5(m4039RL59, m4039RL57, m4039RL60) + this.f9239X[3] + 1352829926, 12) + m4039RL58;
+        int m4039RL62 = m4039RL(m4039RL57, 10);
+        int m4039RL63 = m4039RL(m4039RL58 + m4044f5(m4039RL61, m4039RL59, m4039RL62) + this.f9239X[12] + 1352829926, 6) + m4039RL60;
+        int m4039RL64 = m4039RL(m4039RL59, 10);
+        int m4039RL65 = m4039RL(m4039RL28 + m4041f2(m4039RL31, m4039RL29, m4039RL32) + this.f9239X[7] + 1518500249, 7) + m4039RL30;
+        int m4039RL66 = m4039RL(m4039RL29, 10);
+        int m4039RL67 = m4039RL(m4039RL30 + m4041f2(m4039RL65, m4039RL31, m4039RL66) + this.f9239X[4] + 1518500249, 6) + m4039RL32;
+        int m4039RL68 = m4039RL(m4039RL31, 10);
+        int m4039RL69 = m4039RL(m4039RL32 + m4041f2(m4039RL67, m4039RL65, m4039RL68) + this.f9239X[13] + 1518500249, 8) + m4039RL66;
+        int m4039RL70 = m4039RL(m4039RL65, 10);
+        int m4039RL71 = m4039RL(m4039RL66 + m4041f2(m4039RL69, m4039RL67, m4039RL70) + this.f9239X[1] + 1518500249, 13) + m4039RL68;
+        int m4039RL72 = m4039RL(m4039RL67, 10);
+        int m4039RL73 = m4039RL(m4039RL68 + m4041f2(m4039RL71, m4039RL69, m4039RL72) + this.f9239X[10] + 1518500249, 11) + m4039RL70;
+        int m4039RL74 = m4039RL(m4039RL69, 10);
+        int m4039RL75 = m4039RL(m4039RL70 + m4041f2(m4039RL73, m4039RL71, m4039RL74) + this.f9239X[6] + 1518500249, 9) + m4039RL72;
+        int m4039RL76 = m4039RL(m4039RL71, 10);
+        int m4039RL77 = m4039RL(m4039RL72 + m4041f2(m4039RL75, m4039RL73, m4039RL76) + this.f9239X[15] + 1518500249, 7) + m4039RL74;
+        int m4039RL78 = m4039RL(m4039RL73, 10);
+        int m4039RL79 = m4039RL(m4039RL74 + m4041f2(m4039RL77, m4039RL75, m4039RL78) + this.f9239X[3] + 1518500249, 15) + m4039RL76;
+        int m4039RL80 = m4039RL(m4039RL75, 10);
+        int m4039RL81 = m4039RL(m4039RL76 + m4041f2(m4039RL79, m4039RL77, m4039RL80) + this.f9239X[12] + 1518500249, 7) + m4039RL78;
+        int m4039RL82 = m4039RL(m4039RL77, 10);
+        int m4039RL83 = m4039RL(m4039RL78 + m4041f2(m4039RL81, m4039RL79, m4039RL82) + this.f9239X[0] + 1518500249, 12) + m4039RL80;
+        int m4039RL84 = m4039RL(m4039RL79, 10);
+        int m4039RL85 = m4039RL(m4039RL80 + m4041f2(m4039RL83, m4039RL81, m4039RL84) + this.f9239X[9] + 1518500249, 15) + m4039RL82;
+        int m4039RL86 = m4039RL(m4039RL81, 10);
+        int m4039RL87 = m4039RL(m4039RL82 + m4041f2(m4039RL85, m4039RL83, m4039RL86) + this.f9239X[5] + 1518500249, 9) + m4039RL84;
+        int m4039RL88 = m4039RL(m4039RL83, 10);
+        int m4039RL89 = m4039RL(m4039RL84 + m4041f2(m4039RL87, m4039RL85, m4039RL88) + this.f9239X[2] + 1518500249, 11) + m4039RL86;
+        int m4039RL90 = m4039RL(m4039RL85, 10);
+        int m4039RL91 = m4039RL(m4039RL86 + m4041f2(m4039RL89, m4039RL87, m4039RL90) + this.f9239X[14] + 1518500249, 7) + m4039RL88;
+        int m4039RL92 = m4039RL(m4039RL87, 10);
+        int m4039RL93 = m4039RL(m4039RL88 + m4041f2(m4039RL91, m4039RL89, m4039RL92) + this.f9239X[11] + 1518500249, 13) + m4039RL90;
+        int m4039RL94 = m4039RL(m4039RL89, 10);
+        int m4039RL95 = m4039RL(m4039RL90 + m4041f2(m4039RL93, m4039RL91, m4039RL94) + this.f9239X[8] + 1518500249, 12) + m4039RL92;
+        int m4039RL96 = m4039RL(m4039RL91, 10);
+        int m4039RL97 = m4039RL(m4039RL60 + m4043f4(m4039RL63, m4039RL61, m4039RL64) + this.f9239X[6] + 1548603684, 9) + m4039RL62;
+        int m4039RL98 = m4039RL(m4039RL61, 10);
+        int m4039RL99 = m4039RL(m4039RL62 + m4043f4(m4039RL97, m4039RL63, m4039RL98) + this.f9239X[11] + 1548603684, 13) + m4039RL64;
+        int m4039RL100 = m4039RL(m4039RL63, 10);
+        int m4039RL101 = m4039RL(m4039RL64 + m4043f4(m4039RL99, m4039RL97, m4039RL100) + this.f9239X[3] + 1548603684, 15) + m4039RL98;
+        int m4039RL102 = m4039RL(m4039RL97, 10);
+        int m4039RL103 = m4039RL(m4039RL98 + m4043f4(m4039RL101, m4039RL99, m4039RL102) + this.f9239X[7] + 1548603684, 7) + m4039RL100;
+        int m4039RL104 = m4039RL(m4039RL99, 10);
+        int m4039RL105 = m4039RL(m4039RL100 + m4043f4(m4039RL103, m4039RL101, m4039RL104) + this.f9239X[0] + 1548603684, 12) + m4039RL102;
+        int m4039RL106 = m4039RL(m4039RL101, 10);
+        int m4039RL107 = m4039RL(m4039RL102 + m4043f4(m4039RL105, m4039RL103, m4039RL106) + this.f9239X[13] + 1548603684, 8) + m4039RL104;
+        int m4039RL108 = m4039RL(m4039RL103, 10);
+        int m4039RL109 = m4039RL(m4039RL104 + m4043f4(m4039RL107, m4039RL105, m4039RL108) + this.f9239X[5] + 1548603684, 9) + m4039RL106;
+        int m4039RL110 = m4039RL(m4039RL105, 10);
+        int m4039RL111 = m4039RL(m4039RL106 + m4043f4(m4039RL109, m4039RL107, m4039RL110) + this.f9239X[10] + 1548603684, 11) + m4039RL108;
+        int m4039RL112 = m4039RL(m4039RL107, 10);
+        int m4039RL113 = m4039RL(m4039RL108 + m4043f4(m4039RL111, m4039RL109, m4039RL112) + this.f9239X[14] + 1548603684, 7) + m4039RL110;
+        int m4039RL114 = m4039RL(m4039RL109, 10);
+        int m4039RL115 = m4039RL(m4039RL110 + m4043f4(m4039RL113, m4039RL111, m4039RL114) + this.f9239X[15] + 1548603684, 7) + m4039RL112;
+        int m4039RL116 = m4039RL(m4039RL111, 10);
+        int m4039RL117 = m4039RL(m4039RL112 + m4043f4(m4039RL115, m4039RL113, m4039RL116) + this.f9239X[8] + 1548603684, 12) + m4039RL114;
+        int m4039RL118 = m4039RL(m4039RL113, 10);
+        int m4039RL119 = m4039RL(m4039RL114 + m4043f4(m4039RL117, m4039RL115, m4039RL118) + this.f9239X[12] + 1548603684, 7) + m4039RL116;
+        int m4039RL120 = m4039RL(m4039RL115, 10);
+        int m4039RL121 = m4039RL(m4039RL116 + m4043f4(m4039RL119, m4039RL117, m4039RL120) + this.f9239X[4] + 1548603684, 6) + m4039RL118;
+        int m4039RL122 = m4039RL(m4039RL117, 10);
+        int m4039RL123 = m4039RL(m4039RL118 + m4043f4(m4039RL121, m4039RL119, m4039RL122) + this.f9239X[9] + 1548603684, 15) + m4039RL120;
+        int m4039RL124 = m4039RL(m4039RL119, 10);
+        int m4039RL125 = m4039RL(m4039RL120 + m4043f4(m4039RL123, m4039RL121, m4039RL124) + this.f9239X[1] + 1548603684, 13) + m4039RL122;
+        int m4039RL126 = m4039RL(m4039RL121, 10);
+        int m4039RL127 = m4039RL(m4039RL122 + m4043f4(m4039RL125, m4039RL123, m4039RL126) + this.f9239X[2] + 1548603684, 11) + m4039RL124;
+        int m4039RL128 = m4039RL(m4039RL123, 10);
+        int m4039RL129 = m4039RL(m4039RL92 + m4042f3(m4039RL95, m4039RL93, m4039RL96) + this.f9239X[3] + 1859775393, 11) + m4039RL94;
+        int m4039RL130 = m4039RL(m4039RL93, 10);
+        int m4039RL131 = m4039RL(m4039RL94 + m4042f3(m4039RL129, m4039RL95, m4039RL130) + this.f9239X[10] + 1859775393, 13) + m4039RL96;
+        int m4039RL132 = m4039RL(m4039RL95, 10);
+        int m4039RL133 = m4039RL(m4039RL96 + m4042f3(m4039RL131, m4039RL129, m4039RL132) + this.f9239X[14] + 1859775393, 6) + m4039RL130;
+        int m4039RL134 = m4039RL(m4039RL129, 10);
+        int m4039RL135 = m4039RL(m4039RL130 + m4042f3(m4039RL133, m4039RL131, m4039RL134) + this.f9239X[4] + 1859775393, 7) + m4039RL132;
+        int m4039RL136 = m4039RL(m4039RL131, 10);
+        int m4039RL137 = m4039RL(m4039RL132 + m4042f3(m4039RL135, m4039RL133, m4039RL136) + this.f9239X[9] + 1859775393, 14) + m4039RL134;
+        int m4039RL138 = m4039RL(m4039RL133, 10);
+        int m4039RL139 = m4039RL(m4039RL134 + m4042f3(m4039RL137, m4039RL135, m4039RL138) + this.f9239X[15] + 1859775393, 9) + m4039RL136;
+        int m4039RL140 = m4039RL(m4039RL135, 10);
+        int m4039RL141 = m4039RL(m4039RL136 + m4042f3(m4039RL139, m4039RL137, m4039RL140) + this.f9239X[8] + 1859775393, 13) + m4039RL138;
+        int m4039RL142 = m4039RL(m4039RL137, 10);
+        int m4039RL143 = m4039RL(m4039RL138 + m4042f3(m4039RL141, m4039RL139, m4039RL142) + this.f9239X[1] + 1859775393, 15) + m4039RL140;
+        int m4039RL144 = m4039RL(m4039RL139, 10);
+        int m4039RL145 = m4039RL(m4039RL140 + m4042f3(m4039RL143, m4039RL141, m4039RL144) + this.f9239X[2] + 1859775393, 14) + m4039RL142;
+        int m4039RL146 = m4039RL(m4039RL141, 10);
+        int m4039RL147 = m4039RL(m4039RL142 + m4042f3(m4039RL145, m4039RL143, m4039RL146) + this.f9239X[7] + 1859775393, 8) + m4039RL144;
+        int m4039RL148 = m4039RL(m4039RL143, 10);
+        int m4039RL149 = m4039RL(m4039RL144 + m4042f3(m4039RL147, m4039RL145, m4039RL148) + this.f9239X[0] + 1859775393, 13) + m4039RL146;
+        int m4039RL150 = m4039RL(m4039RL145, 10);
+        int m4039RL151 = m4039RL(m4039RL146 + m4042f3(m4039RL149, m4039RL147, m4039RL150) + this.f9239X[6] + 1859775393, 6) + m4039RL148;
+        int m4039RL152 = m4039RL(m4039RL147, 10);
+        int m4039RL153 = m4039RL(m4039RL148 + m4042f3(m4039RL151, m4039RL149, m4039RL152) + this.f9239X[13] + 1859775393, 5) + m4039RL150;
+        int m4039RL154 = m4039RL(m4039RL149, 10);
+        int m4039RL155 = m4039RL(m4039RL150 + m4042f3(m4039RL153, m4039RL151, m4039RL154) + this.f9239X[11] + 1859775393, 12) + m4039RL152;
+        int m4039RL156 = m4039RL(m4039RL151, 10);
+        int m4039RL157 = m4039RL(m4039RL152 + m4042f3(m4039RL155, m4039RL153, m4039RL156) + this.f9239X[5] + 1859775393, 7) + m4039RL154;
+        int m4039RL158 = m4039RL(m4039RL153, 10);
+        int m4039RL159 = m4039RL(m4039RL154 + m4042f3(m4039RL157, m4039RL155, m4039RL158) + this.f9239X[12] + 1859775393, 5) + m4039RL156;
+        int m4039RL160 = m4039RL(m4039RL155, 10);
+        int m4039RL161 = m4039RL(m4039RL124 + m4042f3(m4039RL127, m4039RL125, m4039RL128) + this.f9239X[15] + 1836072691, 9) + m4039RL126;
+        int m4039RL162 = m4039RL(m4039RL125, 10);
+        int m4039RL163 = m4039RL(m4039RL126 + m4042f3(m4039RL161, m4039RL127, m4039RL162) + this.f9239X[5] + 1836072691, 7) + m4039RL128;
+        int m4039RL164 = m4039RL(m4039RL127, 10);
+        int m4039RL165 = m4039RL(m4039RL128 + m4042f3(m4039RL163, m4039RL161, m4039RL164) + this.f9239X[1] + 1836072691, 15) + m4039RL162;
+        int m4039RL166 = m4039RL(m4039RL161, 10);
+        int m4039RL167 = m4039RL(m4039RL162 + m4042f3(m4039RL165, m4039RL163, m4039RL166) + this.f9239X[3] + 1836072691, 11) + m4039RL164;
+        int m4039RL168 = m4039RL(m4039RL163, 10);
+        int m4039RL169 = m4039RL(m4039RL164 + m4042f3(m4039RL167, m4039RL165, m4039RL168) + this.f9239X[7] + 1836072691, 8) + m4039RL166;
+        int m4039RL170 = m4039RL(m4039RL165, 10);
+        int m4039RL171 = m4039RL(m4039RL166 + m4042f3(m4039RL169, m4039RL167, m4039RL170) + this.f9239X[14] + 1836072691, 6) + m4039RL168;
+        int m4039RL172 = m4039RL(m4039RL167, 10);
+        int m4039RL173 = m4039RL(m4039RL168 + m4042f3(m4039RL171, m4039RL169, m4039RL172) + this.f9239X[6] + 1836072691, 6) + m4039RL170;
+        int m4039RL174 = m4039RL(m4039RL169, 10);
+        int m4039RL175 = m4039RL(m4039RL170 + m4042f3(m4039RL173, m4039RL171, m4039RL174) + this.f9239X[9] + 1836072691, 14) + m4039RL172;
+        int m4039RL176 = m4039RL(m4039RL171, 10);
+        int m4039RL177 = m4039RL(m4039RL172 + m4042f3(m4039RL175, m4039RL173, m4039RL176) + this.f9239X[11] + 1836072691, 12) + m4039RL174;
+        int m4039RL178 = m4039RL(m4039RL173, 10);
+        int m4039RL179 = m4039RL(m4039RL174 + m4042f3(m4039RL177, m4039RL175, m4039RL178) + this.f9239X[8] + 1836072691, 13) + m4039RL176;
+        int m4039RL180 = m4039RL(m4039RL175, 10);
+        int m4039RL181 = m4039RL(m4039RL176 + m4042f3(m4039RL179, m4039RL177, m4039RL180) + this.f9239X[12] + 1836072691, 5) + m4039RL178;
+        int m4039RL182 = m4039RL(m4039RL177, 10);
+        int m4039RL183 = m4039RL(m4039RL178 + m4042f3(m4039RL181, m4039RL179, m4039RL182) + this.f9239X[2] + 1836072691, 14) + m4039RL180;
+        int m4039RL184 = m4039RL(m4039RL179, 10);
+        int m4039RL185 = m4039RL(m4039RL180 + m4042f3(m4039RL183, m4039RL181, m4039RL184) + this.f9239X[10] + 1836072691, 13) + m4039RL182;
+        int m4039RL186 = m4039RL(m4039RL181, 10);
+        int m4039RL187 = m4039RL(m4039RL182 + m4042f3(m4039RL185, m4039RL183, m4039RL186) + this.f9239X[0] + 1836072691, 13) + m4039RL184;
+        int m4039RL188 = m4039RL(m4039RL183, 10);
+        int m4039RL189 = m4039RL(m4039RL184 + m4042f3(m4039RL187, m4039RL185, m4039RL188) + this.f9239X[4] + 1836072691, 7) + m4039RL186;
+        int m4039RL190 = m4039RL(m4039RL185, 10);
+        int m4039RL191 = m4039RL(m4039RL186 + m4042f3(m4039RL189, m4039RL187, m4039RL190) + this.f9239X[13] + 1836072691, 5) + m4039RL188;
+        int m4039RL192 = m4039RL(m4039RL187, 10);
+        int m4039RL193 = m4039RL(((m4039RL156 + m4043f4(m4039RL159, m4039RL157, m4039RL160)) + this.f9239X[1]) - 1894007588, 11) + m4039RL158;
+        int m4039RL194 = m4039RL(m4039RL157, 10);
+        int m4039RL195 = m4039RL(((m4039RL158 + m4043f4(m4039RL193, m4039RL159, m4039RL194)) + this.f9239X[9]) - 1894007588, 12) + m4039RL160;
+        int m4039RL196 = m4039RL(m4039RL159, 10);
+        int m4039RL197 = m4039RL(((m4039RL160 + m4043f4(m4039RL195, m4039RL193, m4039RL196)) + this.f9239X[11]) - 1894007588, 14) + m4039RL194;
+        int m4039RL198 = m4039RL(m4039RL193, 10);
+        int m4039RL199 = m4039RL(((m4039RL194 + m4043f4(m4039RL197, m4039RL195, m4039RL198)) + this.f9239X[10]) - 1894007588, 15) + m4039RL196;
+        int m4039RL200 = m4039RL(m4039RL195, 10);
+        int m4039RL201 = m4039RL(((m4039RL196 + m4043f4(m4039RL199, m4039RL197, m4039RL200)) + this.f9239X[0]) - 1894007588, 14) + m4039RL198;
+        int m4039RL202 = m4039RL(m4039RL197, 10);
+        int m4039RL203 = m4039RL(((m4039RL198 + m4043f4(m4039RL201, m4039RL199, m4039RL202)) + this.f9239X[8]) - 1894007588, 15) + m4039RL200;
+        int m4039RL204 = m4039RL(m4039RL199, 10);
+        int m4039RL205 = m4039RL(((m4039RL200 + m4043f4(m4039RL203, m4039RL201, m4039RL204)) + this.f9239X[12]) - 1894007588, 9) + m4039RL202;
+        int m4039RL206 = m4039RL(m4039RL201, 10);
+        int m4039RL207 = m4039RL(((m4039RL202 + m4043f4(m4039RL205, m4039RL203, m4039RL206)) + this.f9239X[4]) - 1894007588, 8) + m4039RL204;
+        int m4039RL208 = m4039RL(m4039RL203, 10);
+        int m4039RL209 = m4039RL(((m4039RL204 + m4043f4(m4039RL207, m4039RL205, m4039RL208)) + this.f9239X[13]) - 1894007588, 9) + m4039RL206;
+        int m4039RL210 = m4039RL(m4039RL205, 10);
+        int m4039RL211 = m4039RL(((m4039RL206 + m4043f4(m4039RL209, m4039RL207, m4039RL210)) + this.f9239X[3]) - 1894007588, 14) + m4039RL208;
+        int m4039RL212 = m4039RL(m4039RL207, 10);
+        int m4039RL213 = m4039RL(((m4039RL208 + m4043f4(m4039RL211, m4039RL209, m4039RL212)) + this.f9239X[7]) - 1894007588, 5) + m4039RL210;
+        int m4039RL214 = m4039RL(m4039RL209, 10);
+        int m4039RL215 = m4039RL(((m4039RL210 + m4043f4(m4039RL213, m4039RL211, m4039RL214)) + this.f9239X[15]) - 1894007588, 6) + m4039RL212;
+        int m4039RL216 = m4039RL(m4039RL211, 10);
+        int m4039RL217 = m4039RL(((m4039RL212 + m4043f4(m4039RL215, m4039RL213, m4039RL216)) + this.f9239X[14]) - 1894007588, 8) + m4039RL214;
+        int m4039RL218 = m4039RL(m4039RL213, 10);
+        int m4039RL219 = m4039RL(((m4039RL214 + m4043f4(m4039RL217, m4039RL215, m4039RL218)) + this.f9239X[5]) - 1894007588, 6) + m4039RL216;
+        int m4039RL220 = m4039RL(m4039RL215, 10);
+        int m4039RL221 = m4039RL(((m4039RL216 + m4043f4(m4039RL219, m4039RL217, m4039RL220)) + this.f9239X[6]) - 1894007588, 5) + m4039RL218;
+        int m4039RL222 = m4039RL(m4039RL217, 10);
+        int m4039RL223 = m4039RL(((m4039RL218 + m4043f4(m4039RL221, m4039RL219, m4039RL222)) + this.f9239X[2]) - 1894007588, 12) + m4039RL220;
+        int m4039RL224 = m4039RL(m4039RL219, 10);
+        int m4039RL225 = m4039RL(m4039RL188 + m4041f2(m4039RL191, m4039RL189, m4039RL192) + this.f9239X[8] + 2053994217, 15) + m4039RL190;
+        int m4039RL226 = m4039RL(m4039RL189, 10);
+        int m4039RL227 = m4039RL(m4039RL190 + m4041f2(m4039RL225, m4039RL191, m4039RL226) + this.f9239X[6] + 2053994217, 5) + m4039RL192;
+        int m4039RL228 = m4039RL(m4039RL191, 10);
+        int m4039RL229 = m4039RL(m4039RL192 + m4041f2(m4039RL227, m4039RL225, m4039RL228) + this.f9239X[4] + 2053994217, 8) + m4039RL226;
+        int m4039RL230 = m4039RL(m4039RL225, 10);
+        int m4039RL231 = m4039RL(m4039RL226 + m4041f2(m4039RL229, m4039RL227, m4039RL230) + this.f9239X[1] + 2053994217, 11) + m4039RL228;
+        int m4039RL232 = m4039RL(m4039RL227, 10);
+        int m4039RL233 = m4039RL(m4039RL228 + m4041f2(m4039RL231, m4039RL229, m4039RL232) + this.f9239X[3] + 2053994217, 14) + m4039RL230;
+        int m4039RL234 = m4039RL(m4039RL229, 10);
+        int m4039RL235 = m4039RL(m4039RL230 + m4041f2(m4039RL233, m4039RL231, m4039RL234) + this.f9239X[11] + 2053994217, 14) + m4039RL232;
+        int m4039RL236 = m4039RL(m4039RL231, 10);
+        int m4039RL237 = m4039RL(m4039RL232 + m4041f2(m4039RL235, m4039RL233, m4039RL236) + this.f9239X[15] + 2053994217, 6) + m4039RL234;
+        int m4039RL238 = m4039RL(m4039RL233, 10);
+        int m4039RL239 = m4039RL(m4039RL234 + m4041f2(m4039RL237, m4039RL235, m4039RL238) + this.f9239X[0] + 2053994217, 14) + m4039RL236;
+        int m4039RL240 = m4039RL(m4039RL235, 10);
+        int m4039RL241 = m4039RL(m4039RL236 + m4041f2(m4039RL239, m4039RL237, m4039RL240) + this.f9239X[5] + 2053994217, 6) + m4039RL238;
+        int m4039RL242 = m4039RL(m4039RL237, 10);
+        int m4039RL243 = m4039RL(m4039RL238 + m4041f2(m4039RL241, m4039RL239, m4039RL242) + this.f9239X[12] + 2053994217, 9) + m4039RL240;
+        int m4039RL244 = m4039RL(m4039RL239, 10);
+        int m4039RL245 = m4039RL(m4039RL240 + m4041f2(m4039RL243, m4039RL241, m4039RL244) + this.f9239X[2] + 2053994217, 12) + m4039RL242;
+        int m4039RL246 = m4039RL(m4039RL241, 10);
+        int m4039RL247 = m4039RL(m4039RL242 + m4041f2(m4039RL245, m4039RL243, m4039RL246) + this.f9239X[13] + 2053994217, 9) + m4039RL244;
+        int m4039RL248 = m4039RL(m4039RL243, 10);
+        int m4039RL249 = m4039RL(m4039RL244 + m4041f2(m4039RL247, m4039RL245, m4039RL248) + this.f9239X[9] + 2053994217, 12) + m4039RL246;
+        int m4039RL250 = m4039RL(m4039RL245, 10);
+        int m4039RL251 = m4039RL(m4039RL246 + m4041f2(m4039RL249, m4039RL247, m4039RL250) + this.f9239X[7] + 2053994217, 5) + m4039RL248;
+        int m4039RL252 = m4039RL(m4039RL247, 10);
+        int m4039RL253 = m4039RL(m4039RL248 + m4041f2(m4039RL251, m4039RL249, m4039RL252) + this.f9239X[10] + 2053994217, 15) + m4039RL250;
+        int m4039RL254 = m4039RL(m4039RL249, 10);
+        int m4039RL255 = m4039RL(m4039RL250 + m4041f2(m4039RL253, m4039RL251, m4039RL254) + this.f9239X[14] + 2053994217, 8) + m4039RL252;
+        int m4039RL256 = m4039RL(m4039RL251, 10);
+        int m4039RL257 = m4039RL(((m4039RL220 + m4044f5(m4039RL223, m4039RL221, m4039RL224)) + this.f9239X[4]) - 1454113458, 9) + m4039RL222;
+        int m4039RL258 = m4039RL(m4039RL221, 10);
+        int m4039RL259 = m4039RL(((m4039RL222 + m4044f5(m4039RL257, m4039RL223, m4039RL258)) + this.f9239X[0]) - 1454113458, 15) + m4039RL224;
+        int m4039RL260 = m4039RL(m4039RL223, 10);
+        int m4039RL261 = m4039RL(((m4039RL224 + m4044f5(m4039RL259, m4039RL257, m4039RL260)) + this.f9239X[5]) - 1454113458, 5) + m4039RL258;
+        int m4039RL262 = m4039RL(m4039RL257, 10);
+        int m4039RL263 = m4039RL(((m4039RL258 + m4044f5(m4039RL261, m4039RL259, m4039RL262)) + this.f9239X[9]) - 1454113458, 11) + m4039RL260;
+        int m4039RL264 = m4039RL(m4039RL259, 10);
+        int m4039RL265 = m4039RL(((m4039RL260 + m4044f5(m4039RL263, m4039RL261, m4039RL264)) + this.f9239X[7]) - 1454113458, 6) + m4039RL262;
+        int m4039RL266 = m4039RL(m4039RL261, 10);
+        int m4039RL267 = m4039RL(((m4039RL262 + m4044f5(m4039RL265, m4039RL263, m4039RL266)) + this.f9239X[12]) - 1454113458, 8) + m4039RL264;
+        int m4039RL268 = m4039RL(m4039RL263, 10);
+        int m4039RL269 = m4039RL(((m4039RL264 + m4044f5(m4039RL267, m4039RL265, m4039RL268)) + this.f9239X[2]) - 1454113458, 13) + m4039RL266;
+        int m4039RL270 = m4039RL(m4039RL265, 10);
+        int m4039RL271 = m4039RL(((m4039RL266 + m4044f5(m4039RL269, m4039RL267, m4039RL270)) + this.f9239X[10]) - 1454113458, 12) + m4039RL268;
+        int m4039RL272 = m4039RL(m4039RL267, 10);
+        int m4039RL273 = m4039RL(((m4039RL268 + m4044f5(m4039RL271, m4039RL269, m4039RL272)) + this.f9239X[14]) - 1454113458, 5) + m4039RL270;
+        int m4039RL274 = m4039RL(m4039RL269, 10);
+        int m4039RL275 = m4039RL(((m4039RL270 + m4044f5(m4039RL273, m4039RL271, m4039RL274)) + this.f9239X[1]) - 1454113458, 12) + m4039RL272;
+        int m4039RL276 = m4039RL(m4039RL271, 10);
+        int m4039RL277 = m4039RL(((m4039RL272 + m4044f5(m4039RL275, m4039RL273, m4039RL276)) + this.f9239X[3]) - 1454113458, 13) + m4039RL274;
+        int m4039RL278 = m4039RL(m4039RL273, 10);
+        int m4039RL279 = m4039RL(((m4039RL274 + m4044f5(m4039RL277, m4039RL275, m4039RL278)) + this.f9239X[8]) - 1454113458, 14) + m4039RL276;
+        int m4039RL280 = m4039RL(m4039RL275, 10);
+        int m4039RL281 = m4039RL(((m4039RL276 + m4044f5(m4039RL279, m4039RL277, m4039RL280)) + this.f9239X[11]) - 1454113458, 11) + m4039RL278;
+        int m4039RL282 = m4039RL(m4039RL277, 10);
+        int m4039RL283 = m4039RL(((m4039RL278 + m4044f5(m4039RL281, m4039RL279, m4039RL282)) + this.f9239X[6]) - 1454113458, 8) + m4039RL280;
+        int m4039RL284 = m4039RL(m4039RL279, 10);
+        int m4039RL285 = m4039RL(((m4039RL280 + m4044f5(m4039RL283, m4039RL281, m4039RL284)) + this.f9239X[15]) - 1454113458, 5) + m4039RL282;
+        int m4039RL286 = m4039RL(m4039RL281, 10);
+        int m4039RL287 = m4039RL(((m4039RL282 + m4044f5(m4039RL285, m4039RL283, m4039RL286)) + this.f9239X[13]) - 1454113458, 6) + m4039RL284;
+        int m4039RL288 = m4039RL(m4039RL283, 10);
+        int m4039RL289 = m4039RL(m4039RL252 + m4040f1(m4039RL255, m4039RL253, m4039RL256) + this.f9239X[12], 8) + m4039RL254;
+        int m4039RL290 = m4039RL(m4039RL253, 10);
+        int m4039RL291 = m4039RL(m4039RL254 + m4040f1(m4039RL289, m4039RL255, m4039RL290) + this.f9239X[15], 5) + m4039RL256;
+        int m4039RL292 = m4039RL(m4039RL255, 10);
+        int m4039RL293 = m4039RL(m4039RL256 + m4040f1(m4039RL291, m4039RL289, m4039RL292) + this.f9239X[10], 12) + m4039RL290;
+        int m4039RL294 = m4039RL(m4039RL289, 10);
+        int m4039RL295 = m4039RL(m4039RL290 + m4040f1(m4039RL293, m4039RL291, m4039RL294) + this.f9239X[4], 9) + m4039RL292;
+        int m4039RL296 = m4039RL(m4039RL291, 10);
+        int m4039RL297 = m4039RL(m4039RL292 + m4040f1(m4039RL295, m4039RL293, m4039RL296) + this.f9239X[1], 12) + m4039RL294;
+        int m4039RL298 = m4039RL(m4039RL293, 10);
+        int m4039RL299 = m4039RL(m4039RL294 + m4040f1(m4039RL297, m4039RL295, m4039RL298) + this.f9239X[5], 5) + m4039RL296;
+        int m4039RL300 = m4039RL(m4039RL295, 10);
+        int m4039RL301 = m4039RL(m4039RL296 + m4040f1(m4039RL299, m4039RL297, m4039RL300) + this.f9239X[8], 14) + m4039RL298;
+        int m4039RL302 = m4039RL(m4039RL297, 10);
+        int m4039RL303 = m4039RL(m4039RL298 + m4040f1(m4039RL301, m4039RL299, m4039RL302) + this.f9239X[7], 6) + m4039RL300;
+        int m4039RL304 = m4039RL(m4039RL299, 10);
+        int m4039RL305 = m4039RL(m4039RL300 + m4040f1(m4039RL303, m4039RL301, m4039RL304) + this.f9239X[6], 8) + m4039RL302;
+        int m4039RL306 = m4039RL(m4039RL301, 10);
+        int m4039RL307 = m4039RL(m4039RL302 + m4040f1(m4039RL305, m4039RL303, m4039RL306) + this.f9239X[2], 13) + m4039RL304;
+        int m4039RL308 = m4039RL(m4039RL303, 10);
+        int m4039RL309 = m4039RL(m4039RL304 + m4040f1(m4039RL307, m4039RL305, m4039RL308) + this.f9239X[13], 6) + m4039RL306;
+        int m4039RL310 = m4039RL(m4039RL305, 10);
+        int m4039RL311 = m4039RL(m4039RL306 + m4040f1(m4039RL309, m4039RL307, m4039RL310) + this.f9239X[14], 5) + m4039RL308;
+        int m4039RL312 = m4039RL(m4039RL307, 10);
+        int m4039RL313 = m4039RL(m4039RL308 + m4040f1(m4039RL311, m4039RL309, m4039RL312) + this.f9239X[0], 15) + m4039RL310;
+        int m4039RL314 = m4039RL(m4039RL309, 10);
+        int m4039RL315 = m4039RL(m4039RL310 + m4040f1(m4039RL313, m4039RL311, m4039RL314) + this.f9239X[3], 13) + m4039RL312;
+        int m4039RL316 = m4039RL(m4039RL311, 10);
+        int m4039RL317 = m4039RL(m4039RL312 + m4040f1(m4039RL315, m4039RL313, m4039RL316) + this.f9239X[9], 11) + m4039RL314;
+        int m4039RL318 = m4039RL(m4039RL313, 10);
+        int m4039RL319 = m4039RL(m4039RL314 + m4040f1(m4039RL317, m4039RL315, m4039RL318) + this.f9239X[11], 11) + m4039RL316;
+        int m4039RL320 = m4039RL(m4039RL315, 10) + m4039RL285 + this.f9235H1;
+        this.f9235H1 = this.f9236H2 + m4039RL288 + m4039RL318;
+        this.f9236H2 = this.f9237H3 + m4039RL286 + m4039RL316;
+        this.f9237H3 = this.f9238H4 + m4039RL284 + m4039RL319;
+        this.f9238H4 = this.f9234H0 + m4039RL287 + m4039RL317;
+        this.f9234H0 = m4039RL320;
+        int i6 = 0;
+        this.xOff = 0;
+        while (true) {
+            int[] iArr = this.f9239X;
+            if (i6 == iArr.length) {
+                return;
+            }
+            iArr[i6] = 0;
+            i6++;
+        }
+    }
+
+    @Override // org.bouncycastle.crypto.digests.GeneralDigest
+    protected void processLength(long j) {
+        if (this.xOff > 14) {
+            processBlock();
+        }
+        int[] iArr = this.f9239X;
+        iArr[14] = (int) ((-1) & j);
+        iArr[15] = (int) (j >>> 32);
+    }
+
+    @Override // org.bouncycastle.crypto.digests.GeneralDigest
+    protected void processWord(byte[] bArr, int i) {
+        int[] iArr = this.f9239X;
+        int i2 = this.xOff;
+        this.xOff = i2 + 1;
+        iArr[i2] = ((bArr[i + 3] & 255) << 24) | (bArr[i] & 255) | ((bArr[i + 1] & 255) << 8) | ((bArr[i + 2] & 255) << 16);
+        if (this.xOff == 16) {
+            processBlock();
+        }
+    }
+
+    @Override // org.bouncycastle.crypto.digests.GeneralDigest, org.bouncycastle.crypto.Digest
+    public void reset() {
+        super.reset();
+        this.f9234H0 = 1732584193;
+        this.f9235H1 = -271733879;
+        this.f9236H2 = -1732584194;
+        this.f9237H3 = 271733878;
+        this.f9238H4 = -1009589776;
+        this.xOff = 0;
+        int i = 0;
+        while (true) {
+            int[] iArr = this.f9239X;
+            if (i == iArr.length) {
+                return;
+            }
+            iArr[i] = 0;
+            i++;
+        }
+    }
+
+    @Override // org.bouncycastle.util.Memoable
+    public void reset(Memoable memoable) {
+        copyIn((RIPEMD160Digest) memoable);
+    }
+}

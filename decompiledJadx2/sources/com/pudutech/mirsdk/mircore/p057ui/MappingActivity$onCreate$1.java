@@ -1,0 +1,91 @@
+package com.pudutech.mirsdk.mircore.p057ui;
+
+import com.pudutech.base.Pdlog;
+import com.pudutech.base.architecture.AIDLConnection;
+import kotlin.Metadata;
+import kotlin.ResultKt;
+import kotlin.Unit;
+import kotlin.coroutines.Continuation;
+import kotlin.coroutines.intrinsics.IntrinsicsKt;
+import kotlin.coroutines.jvm.internal.DebugMetadata;
+import kotlin.coroutines.jvm.internal.SuspendLambda;
+import kotlin.jvm.functions.Function2;
+import kotlin.jvm.internal.Intrinsics;
+import kotlinx.coroutines.CoroutineScope;
+
+/* compiled from: MappingActivity.kt */
+@Metadata(m3959bv = {1, 0, 3}, m3960d1 = {"\u0000\u000e\n\u0000\n\u0002\u0010\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\u0010\u0000\u001a\u00020\u0001*\u00020\u0002H\u008a@¢\u0006\u0004\b\u0003\u0010\u0004"}, m3961d2 = {"<anonymous>", "", "Lkotlinx/coroutines/CoroutineScope;", "invoke", "(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"}, m3962k = 3, m3963mv = {1, 1, 16})
+@DebugMetadata(m3969c = "com.pudutech.mirsdk.mircore.ui.MappingActivity$onCreate$1", m3970f = "MappingActivity.kt", m3971i = {0, 1}, m3972l = {65, 67}, m3973m = "invokeSuspend", m3974n = {"$this$launch", "$this$launch"}, m3975s = {"L$0", "L$0"})
+/* loaded from: classes4.dex */
+final class MappingActivity$onCreate$1 extends SuspendLambda implements Function2<CoroutineScope, Continuation<? super Unit>, Object> {
+    Object L$0;
+    int label;
+
+    /* renamed from: p$ */
+    private CoroutineScope f6271p$;
+    final /* synthetic */ MappingActivity this$0;
+
+    /* JADX INFO: Access modifiers changed from: package-private */
+    /* JADX WARN: 'super' call moved to the top of the method (can break code semantics) */
+    public MappingActivity$onCreate$1(MappingActivity mappingActivity, Continuation continuation) {
+        super(2, continuation);
+        this.this$0 = mappingActivity;
+    }
+
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    public final Continuation<Unit> create(Object obj, Continuation<?> completion) {
+        Intrinsics.checkParameterIsNotNull(completion, "completion");
+        MappingActivity$onCreate$1 mappingActivity$onCreate$1 = new MappingActivity$onCreate$1(this.this$0, completion);
+        mappingActivity$onCreate$1.f6271p$ = (CoroutineScope) obj;
+        return mappingActivity$onCreate$1;
+    }
+
+    @Override // kotlin.jvm.functions.Function2
+    public final Object invoke(CoroutineScope coroutineScope, Continuation<? super Unit> continuation) {
+        return ((MappingActivity$onCreate$1) create(coroutineScope, continuation)).invokeSuspend(Unit.INSTANCE);
+    }
+
+    @Override // kotlin.coroutines.jvm.internal.BaseContinuationImpl
+    public final Object invokeSuspend(Object obj) {
+        CoroutineScope coroutineScope;
+        String str;
+        AIDLConnection aIDLConnection;
+        String str2;
+        AIDLConnection aIDLConnection2;
+        Object coroutine_suspended = IntrinsicsKt.getCOROUTINE_SUSPENDED();
+        int i = this.label;
+        if (i == 0) {
+            ResultKt.throwOnFailure(obj);
+            coroutineScope = this.f6271p$;
+            str = this.this$0.TAG;
+            Pdlog.m3273d(str, "begin connect mappingCoreService");
+            aIDLConnection = this.this$0.mappingCoreService;
+            MappingActivity mappingActivity = this.this$0;
+            this.L$0 = coroutineScope;
+            this.label = 1;
+            if (aIDLConnection.connect(mappingActivity, null, this) == coroutine_suspended) {
+                return coroutine_suspended;
+            }
+        } else {
+            if (i != 1) {
+                if (i == 2) {
+                    ResultKt.throwOnFailure(obj);
+                    return Unit.INSTANCE;
+                }
+                throw new IllegalStateException("call to 'resume' before 'invoke' with coroutine");
+            }
+            coroutineScope = (CoroutineScope) this.L$0;
+            ResultKt.throwOnFailure(obj);
+        }
+        str2 = this.this$0.TAG;
+        Pdlog.m3273d(str2, "end connect mappingCoreService");
+        aIDLConnection2 = this.this$0.hardwareService;
+        MappingActivity mappingActivity2 = this.this$0;
+        this.L$0 = coroutineScope;
+        this.label = 2;
+        if (aIDLConnection2.connect(mappingActivity2, null, this) == coroutine_suspended) {
+            return coroutine_suspended;
+        }
+        return Unit.INSTANCE;
+    }
+}

@@ -1,0 +1,13 @@
+package kotlin.reflect.jvm.internal.impl.descriptors.annotations;
+
+/* JADX WARN: Classes with same name are omitted:
+  classes7.dex
+  classes8.dex
+ */
+/* compiled from: KotlinRetention.kt */
+/* loaded from: classes2.dex */
+public enum KotlinRetention {
+    RUNTIME,
+    BINARY,
+    SOURCE
+}

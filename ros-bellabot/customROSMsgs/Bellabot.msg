@@ -1,0 +1,7 @@
+std_msgs/String name
+uint8 battery
+float64 inputLinearSpeed
+float64 inputAngularSpeed
+float64 actualLinearSpeed
+float64 actualAngularSpeed
+float64 maxSpeed

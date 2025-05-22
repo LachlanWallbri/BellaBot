@@ -1,0 +1,15 @@
+package io.grpc.netty.shaded.io.netty.handler.codec.spdy;
+
+/* JADX WARN: Classes with same name are omitted:
+  classes6.dex
+ */
+/* loaded from: classes7.dex */
+public interface SpdyStreamFrame extends SpdyFrame {
+    boolean isLast();
+
+    SpdyStreamFrame setLast(boolean z);
+
+    SpdyStreamFrame setStreamId(int i);
+
+    int streamId();
+}
